@@ -259,7 +259,7 @@ func (s *Sqlite3Store) UpdateAccount(a *Account) error {
 	return nil
 }
 
-func (s *Sqlite3Store) GetAccounts() ([]*Account, error) {
+func (s *Sqlite3Store) GetAccounts() ([]Account, error) {
 	query := `SELECT * FROM accounts;`
 	rows, err := s.db.Query(
 		query)
@@ -267,14 +267,14 @@ func (s *Sqlite3Store) GetAccounts() ([]*Account, error) {
 		fmt.Println("Could not get all accounts")
 		return nil, err
 	}
-	accounts := []*Account{}
+	accounts := []Account{}
 	for rows.Next() {
 		account, err := scanIntoAccount(rows)
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println("Account: ", account)
-		accounts = append(accounts, account)
+		fmt.Println("Account: ", *account)
+		accounts = append(accounts, *account)
 	}
 	fmt.Println("This is all accounts: ", accounts)
 	return accounts, nil
@@ -334,6 +334,5 @@ func scanIntoAccount(rows *sql.Rows) (*Account, error) {
 		return nil, err
 	}
 	fmt.Println("This is account: ", account)
-	fmt.Println("This is account dereferenced: ", &account)
 	return &account, nil
 }

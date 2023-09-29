@@ -39,7 +39,7 @@ window.makeAccount = function() {
     try {
         MakeAccount(firstName, lastName)
             .then((result) => {
-                resultElement!.innerText = result; 
+                response_accountcreation!.innerText = result; 
             })
             .catch((err) => {
                 console.error(err);
@@ -54,36 +54,75 @@ window.getAllAccounts = function() {
     try {
         GetAllAccounts()
         .then((result) => {
-            console.log(result)
-            resultElement!.innerText = result;
+            responseTable!.textContent = JSON.stringify(result, null , 4)
+
         })
         .catch((err: any) => {
             console.error(err);
         });
     }catch (err) {
+        console.log("Inside the error catch")
         console.error(err);
     }
+    console.log("Ran through the function 'Get all accounts")
     return
+}
+function insertAccountsOnSelection() {
+    GetAllAccounts().then((result) => {
+        let accSelector = document.getElementById("account-selector") as HTMLSelectElement;
+        result.forEach( (acc) => {
+            let option = document.createElement("option");
+            option.text = acc.first_name!
+            option.value = acc.first_name!
+            accSelector.add(option)
+        })})
+        .catch((err: any) => {
+            console.error(err);
+        }); 
+}
+
+// <li id="accountname_response"></li>
+// <li id="firstname_response"></li>
+// <li id="lastname_response"></li>
+// <li id="balance_response"></li>
+// <li id="portfolios_response"></li>
+// <li id="updatedat_response"></li>
+// <li id="createdat_response"></li>
+//
+function displayCurrentAccount() {
+    let currAcc =  currentSelectedAccount!.value
+    let currAccDisplay = document.getElementById("selected-account")
+    currAccDisplay!.innerText = currAcc
 }
 
 document.querySelector('#app')!.innerHTML = `
-    <img id="logo" class="logo">
-      <div class="result" id="result">Please enter your first Name</div>
-      <div class="input-box" id="input">
-        <input class="input" id="firstName" type="text" autocomplete="off" />
-      </div>
-      <div class="result" id="result">Please enter your last Name</div>
-      <div class="input-box" id="input">
-        <input class="input" id="lastName" type="text" autocomplete="off" />
+        <img id="logo" class="logo">
+        <pre id="responsetablepre"></pre>
+        <button class="btn" onclick="insertAccountsOnSelection()">Select accounts</button>
+        <div id="test"></div>
+        <div id="account-selector-div">
+            <label for 'account-selector'>"Select the active account here"</label>
+            <h3 id="selected-acccount"></h3>
+            <select name="account-selector" id="account-selector" onchange="displayCurrentAccount()"></select>
         </div>
-        <button class="btn" onclick="makeAccount()">Create Account</button>
+        <div class="input-box", "accountcreation" id="input">
+            <h3 id="response-accountcreation">"CinnerTextacccount here"</h3>
+            <input class="input" id="firstName" type="text" autocomplete="off" placeholder="Enter your first name here"/>
+            <input class="input" id="lastName" type="text" autocomplete="off" placeholder="Enter your last name here" />
         </div>
-    </div>
-    <div>
-        <button class="btn" onclick="getAllAccounts()">Get all accounts"</button>
-    </div>
-
+        <div>
+            <button class="btn" onclick="makeAccount()" onclick="insertAccountsOnSelection()" >Create Account</button>
+        </div>
+        <div class="input-box", "portfoliocreation" id="input">
+            <h3 id="response-accountcreation">"Create a portfoolio here"</h3>
+            <input class="input" id="accountid" type="text" autocomplete="off" placeholder="Enter your first name here"/>
+            <input class="input" id="portfolio" type="text" autocomplete="off" placeholder="Enter your last name here" />
+        </div>
+        <div>
+            <button class="btn" onclick="getAllAccounts()">Get all accounts"</button>
+        </div>
 `;
+
 (document.getElementById('logo') as HTMLImageElement).src = logo;
 
 // let nameElement = (document.getElementById("name") as HTMLInputElement);
@@ -92,7 +131,9 @@ let firstNameElement = (document.getElementById("firstName") as HTMLInputElement
 firstNameElement.focus();
 let lastNameElement = (document.getElementById("lastName") as HTMLInputElement);
 lastNameElement.focus();
-let resultElement = document.getElementById("result");
+let response_accountcreation = document.getElementById("response-accountcreation");
+let responseTable = document.getElementById("responsetablepre");
+let currentSelectedAccount = document.getElementById("account-selector") as HTMLSelectElement;
 
 declare global {
     interface Window {

@@ -15,19 +15,26 @@ type App struct {
 func NewApp() *App {
 	return &App{}
 }
-
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
+
+// Getting a DB conection making it not so repetitive with error handling
+func getDBConnection() *Sqlite3Store {
+	s, err := InitSqlite3Store()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return s
+}
+
+
 func (a *App) startup(ctx context.Context) {
 	// Creating Database file
 	err := CreateDatabaseFile()
 	if err != nil {
 		log.Fatal(err)
 	}
-	s, err := InitSqlite3Store()
-	if err != nil {
-		log.Fatal(err)
-	}
+	s := getDBConnection()
 	err = CreateTables(s)
 	if err != nil {
 		log.Fatal(err)
@@ -41,27 +48,22 @@ func (a *App) Greet(name string) string {
 }
 
 func (a *App) MakeAccount(firstName, lastName string) (string, error) {
-	s, err := InitSqlite3Store()
-	if err != nil {
-		return "", err
-	}
+	s := getDBConnection()
 	account := NewAccount(firstName, lastName)
-	err = s.CreateAccount(account)
+	err := s.CreateAccount(account)
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("YOU just made an account with %s, %s", firstName, lastName), nil
 }
 
-func (a *App) GetAllAccounts() (string, error) {
-	s, err := InitSqlite3Store()
-	if err != nil {
-		return "", err
-	}
+func (a *App) GetAllAccounts() ([]Account, error) {
+	s := getDBConnection()
 	accounts, err := s.GetAccounts()
 	if err != nil {
 		fmt.Print(err)
-		return "", err
+		return []Account{}, err
 	}
-	return fmt.Sprintf("Here is all acounts: %v", accounts), nil
+	fmt.Println("Here is all accounts: ", accounts)
+	return accounts, nil
 }

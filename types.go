@@ -2,7 +2,6 @@ package main
 
 import (
 	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -16,56 +15,56 @@ import (
 // ======== GENERAL STRUCT DEFINITIONS ==============
 
 type Account struct {
-	AccountUUID uuid.UUID
-	FirstName   string
-	LastName    string
-	Balance     float64
-	Portfolios  []Portfolio // Do we really need this?
-	UpdatedAt   time.Time
-	CreatedAt   time.Time
+	AccountUUID uuid.UUID   `json:"account_uuid,omitempty"`
+	FirstName   string      `json:"first_name,omitempty"`
+	LastName    string      `json:"last_name,omitempty"`
+	Balance     float64     `json:"balance,omitempty"`
+	Portfolios  []Portfolio `json:"portfolios,omitempty"` // Do we really need this?
+	UpdatedAt   time.Time   `json:"updated_at,omitempty"`
+	CreatedAt   time.Time   `json:"created_at,omitempty"`
 }
 
 type ScannedAccount struct {
-	AccountUUID string
-	FirstName   string
-	LastName    string
-	Balance     float64
-	Portfolios  []Portfolio // Do we really need this?
-	UpdatedAt   string 
-	CreatedAt   string 
+	AccountUUID string      `json:"account_uuid,omitempty"`
+	FirstName   string      `json:"first_name,omitempty"`
+	LastName    string      `json:"last_name,omitempty"`
+	Balance     float64     `json:"balance,omitempty"`
+	Portfolios  []Portfolio `json:"portfolios,omitempty"` // Do we really need this?
+	UpdatedAt   string      `json:"updated_at,omitempty"`
+	CreatedAt   string      `json:"created_at,omitempty"`
 }
 type Portfolio struct {
-	PortfolioUUID     uuid.UUID
-	Name              string
-	AssociatedAccount uuid.UUID
-	Balance           float64
-	Ledger            []Transaction
-	UpdatedAt         time.Time
-	CreatedAt         time.Time
+	PortfolioUUID     uuid.UUID     `json:"portfolio_uuid,omitempty"`
+	Name              string        `json:"name,omitempty"`
+	AssociatedAccount uuid.UUID     `json:"associated_account,omitempty"`
+	Balance           float64       `json:"balance,omitempty"`
+	Ledger            []Transaction `json:"ledger,omitempty"`
+	UpdatedAt         time.Time     `json:"updated_at,omitempty"`
+	CreatedAt         time.Time     `json:"created_at,omitempty"`
 }
 
 type Transaction struct {
-	TransactionUUID      uuid.UUID
-	Name                 string    // Name of the Equity (Stock)
-	Amount               float32   // How much the transaction was
-	AssociatedPortofolio uuid.UUID // Portfolio uuid that the transaction belongs to
-	Type                 string    // Dividends, Sell, Buy
-	Assets               float32   // Amount of the equity recieved / sold in this transaction
-	Date                 time.Time    // Time that the transaction took place
-	CreatedAt            time.Time
+	TransactionUUID      uuid.UUID `json:"transaction_uuid,omitempty"`
+	Name                 string    `json:"name,omitempty"`                  // Name of the Equity (Stock)
+	Amount               float32   `json:"amount,omitempty"`                // How much the transaction was
+	AssociatedPortofolio uuid.UUID `json:"associated_portofolio,omitempty"` // Portfolio uuid that the transaction belongs to
+	Type                 string    `json:"type,omitempty"`                  // Dividends, Sell, Buy
+	Assets               float32   `json:"assets,omitempty"`                // Amount of the equity recieved / sold in this transaction
+	Date                 time.Time `json:"date,omitempty"`                  // Time that the transaction took place
+	CreatedAt            time.Time `json:"created_at,omitempty"`
 }
 
 type Equity struct {
-	EquityUUID  uuid.UUID
-	Name        string    // Full name of the equity
-	Ticker      string    // Ticker of the Equity
-	Price       float32   // Current price at the last updated Time
-	Dividends   float32   // last dividends
-	Payouts     int8      // how many months the stock pays dividends
-	MarketCap   int       // MarketCap of the Stock in Billions of local currency
-	Industry    string    // What industry the stock is in
-	Sector      string    // The sector of the stock
-	LastUpdated time.Time // When the ticker was last updated (mainly price field)
+	EquityUUID  uuid.UUID `json:"equity_uuid,omitempty"`
+	Name        string    `json:"name,omitempty"`         // Full name of the equity
+	Ticker      string    `json:"ticker,omitempty"`       // Ticker of the Equity
+	Price       float32   `json:"price,omitempty"`        // Current price at the last updated Time
+	Dividends   float32   `json:"dividends,omitempty"`    // last dividends
+	Payouts     int8      `json:"payouts,omitempty"`      // how many months the stock pays dividends
+	MarketCap   int       `json:"market_cap,omitempty"`   // MarketCap of the Stock in Billions of local currency
+	Industry    string    `json:"industry,omitempty"`     // What industry the stock is in
+	Sector      string    `json:"sector,omitempty"`       // The sector of the stock
+	LastUpdated time.Time `json:"last_updated,omitempty"` // When the ticker was last updated (mainly price field)
 }
 
 // ========= CREATING =============
